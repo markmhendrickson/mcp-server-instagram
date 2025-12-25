@@ -2,6 +2,10 @@
 
 MCP server for interacting with Instagram Business accounts via the Instagram Graph API.
 
+## Credits
+
+This is a fork of [jlbadano/ig-mcp](https://github.com/jlbadano/ig-mcp). The original repository provides Instagram Graph API integration for business accounts.
+
 ## Features
 
 - **Profile Management**: Get business profile information
@@ -9,15 +13,6 @@ MCP server for interacting with Instagram Business accounts via the Instagram Gr
 - **Analytics**: Get engagement metrics and insights for posts
 - **Direct Messaging**: Read and send Instagram DMs (requires Advanced Access)
 - **Account Management**: List connected Facebook pages
-
-## Prerequisites
-
-1. **Instagram Business Account** linked to a Facebook Page
-2. **Facebook Developer Account** for API access
-3. **Long-lived access token** with required permissions
-4. **Python 3.10+**
-
-See [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) for detailed setup instructions.
 
 ## Installation
 
@@ -27,6 +22,15 @@ pip install -r requirements.txt
 ```
 
 ## Configuration
+
+### Prerequisites
+
+1. **Instagram Business Account** linked to a Facebook Page
+2. **Facebook Developer Account** for API access
+3. **Long-lived access token** with required permissions
+4. **Python 3.10+**
+
+See [AUTHENTICATION_GUIDE.md](AUTHENTICATION_GUIDE.md) for detailed setup instructions.
 
 ### Environment Variables
 
@@ -164,19 +168,38 @@ The server implements rate limiting to comply with Instagram API limits:
 
 ## Error Handling
 
-The server provides comprehensive error handling for:
+The server returns structured error messages in JSON format when operations fail. Common errors include:
+
 - Authentication errors (invalid/expired tokens)
 - Permission errors (missing required permissions)
 - Rate limiting (automatic retry with backoff)
 - Network errors (connection timeouts)
 
-## Security Considerations
+## Security Notes
 
-1. **Never commit credentials** to version control
-2. **Use environment variables** or secure secret management
-3. **Regularly rotate access tokens** (long-lived tokens expire after 60 days)
-4. **Monitor token expiration dates**
-5. **Use HTTPS only** in production
+- **Never commit credentials** to version control
+- **Use environment variables** or secure secret management
+- **Regularly rotate access tokens** (long-lived tokens expire after 60 days)
+- **Monitor token expiration dates**
+- **Use HTTPS only** in production
+
+## Troubleshooting
+
+1. **Authentication Errors**
+   - Verify your access token is valid and not expired
+   - Check that your Instagram account is linked to a Facebook Page
+   - Ensure your Facebook App has the required permissions
+
+2. **Rate Limiting**
+   - The server implements automatic retry with backoff
+   - Monitor your API usage to avoid hitting limits
+   - Profile requests: 200 calls/hour
+   - Media requests: 200 calls/hour
+   - Publishing: 25 posts/day
+
+3. **Permission Errors**
+   - Verify your access token has the required scopes
+   - Direct messaging requires Advanced Access approval from Meta
 
 ## Documentation
 
@@ -190,3 +213,11 @@ The server provides comprehensive error handling for:
 - Direct messaging features require Advanced Access approval from Meta
 - Long-lived tokens expire after 60 days (implement token refresh)
 - The server runs in stdio mode for MCP communication
+
+## License
+
+MIT
+
+## Support
+
+- [GitHub Issues](https://github.com/markmhendrickson/mcp-server-instagram/issues)
