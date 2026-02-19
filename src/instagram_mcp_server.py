@@ -324,7 +324,7 @@ class InstagramMCPServer:
 
                     result = MCPToolResult(
                         success=True,
-                        data=profile.model_dump(mode='json'),
+                        data=profile.model_dump(mode="json"),
                         metadata={
                             "tool": name,
                             "timestamp": datetime.utcnow().isoformat(),
@@ -343,7 +343,7 @@ class InstagramMCPServer:
                     result = MCPToolResult(
                         success=True,
                         data={
-                            "posts": [post.model_dump(mode='json') for post in posts],
+                            "posts": [post.model_dump(mode="json") for post in posts],
                             "count": len(posts),
                         },
                         metadata={
@@ -367,7 +367,9 @@ class InstagramMCPServer:
                         success=True,
                         data={
                             "media_id": media_id,
-                            "insights": [insight.model_dump(mode='json') for insight in insights],
+                            "insights": [
+                                insight.model_dump(mode="json") for insight in insights
+                            ],
                         },
                         metadata={
                             "tool": name,
@@ -381,7 +383,7 @@ class InstagramMCPServer:
 
                     result = MCPToolResult(
                         success=True,
-                        data=response.model_dump(mode='json'),
+                        data=response.model_dump(mode="json"),
                         metadata={
                             "tool": name,
                             "timestamp": datetime.utcnow().isoformat(),
@@ -394,7 +396,7 @@ class InstagramMCPServer:
                     result = MCPToolResult(
                         success=True,
                         data={
-                            "pages": [page.model_dump(mode='json') for page in pages],
+                            "pages": [page.model_dump(mode="json") for page in pages],
                             "count": len(pages),
                         },
                         metadata={
@@ -415,7 +417,9 @@ class InstagramMCPServer:
                     result = MCPToolResult(
                         success=True,
                         data={
-                            "insights": [insight.model_dump(mode='json') for insight in insights],
+                            "insights": [
+                                insight.model_dump(mode="json") for insight in insights
+                            ],
                             "period": period.value,
                         },
                         metadata={
@@ -447,13 +451,15 @@ class InstagramMCPServer:
                     result = MCPToolResult(
                         success=True,
                         data={
-                            "conversations": [conv.model_dump(mode='json') for conv in conversations],
+                            "conversations": [
+                                conv.model_dump(mode="json") for conv in conversations
+                            ],
                             "count": len(conversations),
                         },
                         metadata={
                             "tool": name,
                             "timestamp": datetime.utcnow().isoformat(),
-                            "note": "Requires instagram_manage_messages permission"
+                            "note": "Requires instagram_manage_messages permission",
                         },
                     )
 
@@ -469,7 +475,9 @@ class InstagramMCPServer:
                         success=True,
                         data={
                             "conversation_id": conversation_id,
-                            "messages": [msg.model_dump(mode='json') for msg in messages],
+                            "messages": [
+                                msg.model_dump(mode="json") for msg in messages
+                            ],
                             "count": len(messages),
                         },
                         metadata={
@@ -486,11 +494,11 @@ class InstagramMCPServer:
 
                     result = MCPToolResult(
                         success=True,
-                        data=response.model_dump(mode='json'),
+                        data=response.model_dump(mode="json"),
                         metadata={
                             "tool": name,
                             "timestamp": datetime.utcnow().isoformat(),
-                            "note": "24-hour response window applies. Requires Advanced Access."
+                            "note": "24-hour response window applies. Requires Advanced Access.",
                         },
                     )
 
@@ -514,7 +522,12 @@ class InstagramMCPServer:
                     success=False, error=f"Tool execution failed: {str(e)}"
                 )
 
-            return [TextContent(type="text", text=json.dumps(result.model_dump(mode='json'), indent=2))]
+            return [
+                TextContent(
+                    type="text",
+                    text=json.dumps(result.model_dump(mode="json"), indent=2),
+                )
+            ]
 
         # Resources
         @self.server.list_resources()
@@ -558,21 +571,26 @@ class InstagramMCPServer:
             try:
                 if uri == "instagram://profile":
                     profile = await instagram_client.get_profile_info()
-                    return json.dumps(profile.model_dump(mode='json'), indent=2)
+                    return json.dumps(profile.model_dump(mode="json"), indent=2)
 
                 elif uri == "instagram://media/recent":
                     posts = await instagram_client.get_media_posts(limit=10)
-                    return json.dumps([post.model_dump(mode='json') for post in posts], indent=2)
+                    return json.dumps(
+                        [post.model_dump(mode="json") for post in posts], indent=2
+                    )
 
                 elif uri == "instagram://insights/account":
                     insights = await instagram_client.get_account_insights()
                     return json.dumps(
-                        [insight.model_dump(mode='json') for insight in insights], indent=2
+                        [insight.model_dump(mode="json") for insight in insights],
+                        indent=2,
                     )
 
                 elif uri == "instagram://pages":
                     pages = await instagram_client.get_account_pages()
-                    return json.dumps([page.model_dump(mode='json') for page in pages], indent=2)
+                    return json.dumps(
+                        [page.model_dump(mode="json") for page in pages], indent=2
+                    )
 
                 else:
                     raise ValueError(f"Unknown resource URI: {uri}")
@@ -768,7 +786,7 @@ Please provide:
                     server_version=self.settings.mcp_server_version,
                     capabilities=self.server.get_capabilities(
                         notification_options=NotificationOptions(),
-                        experimental_capabilities={}
+                        experimental_capabilities={},
                     ),
                 ),
             )

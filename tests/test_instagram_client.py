@@ -162,11 +162,11 @@ class TestInstagramClient:
         assert insights[0].name == "impressions"
         assert insights[1].name == "reach"
 
-        # Verify API call
+        # Verify API call - matches actual default metrics (no impressions)
         instagram_client._make_request.assert_called_once_with(
             "GET",
             f"test_media_id/insights",
-            params={"metric": "impressions,reach,likes,comments,shares,saves"},
+            params={"metric": "reach,likes,comments,shares,saved"},
         )
 
     @pytest.mark.asyncio
@@ -179,6 +179,9 @@ class TestInstagramClient:
         instagram_client._make_request = AsyncMock(
             side_effect=[container_response, publish_response]
         )
+
+        # Mock image validation to avoid HTTP call
+        instagram_client._validate_image_aspect_ratio = AsyncMock()
 
         # Create publish request
         request = PublishMediaRequest(
@@ -194,6 +197,8 @@ class TestInstagramClient:
 
         # Verify API calls
         assert instagram_client._make_request.call_count == 2
+        # Verify validation was called
+        instagram_client._validate_image_aspect_ratio.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_validate_access_token_success(self, instagram_client):
