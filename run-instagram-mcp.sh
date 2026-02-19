@@ -30,7 +30,9 @@ fi
 
 # Use venv Python if available, otherwise system Python
 if [ -f "$REPO_ROOT/execution/venv/bin/python3" ]; then
-    exec "$REPO_ROOT/execution/venv/bin/python3" "$SCRIPT_DIR/src/instagram_mcp_server.py"
+    cd "$SCRIPT_DIR"
+    exec "$REPO_ROOT/execution/venv/bin/python3" -m src.instagram_mcp_server
 else
-    exec python3 "$SCRIPT_DIR/src/instagram_mcp_server.py"
+    cd "$SCRIPT_DIR"
+    exec python3 -m src.instagram_mcp_server
 fi
